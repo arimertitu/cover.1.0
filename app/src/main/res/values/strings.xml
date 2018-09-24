@@ -11,5 +11,8 @@
     <string name="email_request">Please enter your registered email</string>
     <string name="send_password">Password reset email sent</string>
     <string name="error_resetpass">Error in sending password reset email</string>
+    <string name="enter_details">Please enter all the details</string>
+    <string name="register_success">Registration Successful</string>
+    <string name="register_fail">Registration Failed</string>
 
 </resources>
