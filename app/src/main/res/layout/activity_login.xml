@@ -24,18 +24,17 @@
 
         <com.rengwuxian.materialedittext.MaterialEditText
 
-            android:id="@+id/edtUsername"
+            android:id="@+id/edtEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:hint="Username"
+            android:hint="@string/email"
             android:inputType="text"
             android:textColor="@android:color/white"
             android:textColorHint="@android:color/white"
             android:textSize="20sp"
             app:met_baseColor="@android:color/white"
             app:met_floatingLabel="highlight"
-            app:met_maxCharacters="20"
             app:met_primaryColor="@android:color/white"
             app:met_singleLineEllipsis="true" />
 
@@ -44,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:hint="Password"
+            android:hint="@string/password"
             android:inputType="textPassword"
             android:textColor="@android:color/white"
             android:textColorHint="@android:color/white"
@@ -60,9 +59,11 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
+            android:background="@drawable/button_style"
             android:layout_marginTop="24dp"
+            android:textColor="@color/colorPrimaryDark"
             android:padding="12dp"
-            android:text="SIGN IN" />
+            android:text="@string/signIn" />
 
         <TextView
             android:id="@+id/link_signup"
@@ -70,8 +71,9 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             android:gravity="center"
-            android:text="No account yet? Create one"
-            android:textSize="16dip" />
+            android:textColor="@android:color/white"
+            android:text="@string/linkSignUp"
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/link_forgotpassword"
@@ -79,8 +81,9 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:gravity="center"
-            android:text="Forgot password?"
-            android:textSize="16dip" />
+            android:textColor="@android:color/white"
+            android:text="@string/forgotPassword"
+            android:textSize="14sp" />
 
 
     </LinearLayout>

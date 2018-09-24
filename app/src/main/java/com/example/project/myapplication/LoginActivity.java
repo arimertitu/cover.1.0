@@ -13,7 +13,7 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 public class LoginActivity extends AppCompatActivity {
 
     private Button btnSignIn;
-    private MaterialEditText edtPassword,edtUsername;
+    private MaterialEditText edtPassword,edtEmail;
     private TextView linkSignUp,linkForgotPassword;
 
     @Override
@@ -23,7 +23,7 @@ public class LoginActivity extends AppCompatActivity {
 
         btnSignIn = (Button)findViewById(R.id.btn_signIn);
         edtPassword = (MaterialEditText)findViewById(R.id.edtPassword);
-        edtUsername = (MaterialEditText)findViewById(R.id.edtUsername);
+        edtEmail = (MaterialEditText)findViewById(R.id.edtEmail);
         linkSignUp = (TextView) findViewById(R.id.link_signup);
         linkForgotPassword = (TextView) findViewById(R.id.link_forgotpassword);
 
@@ -45,6 +45,14 @@ public class LoginActivity extends AppCompatActivity {
                 Intent i = new Intent(LoginActivity.this,RegisterActivity.class);
                 startActivity(i);
 
+            }
+        });
+
+        linkForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(LoginActivity.this,ResetPasswordActivity.class);
+                startActivity(i);
             }
         });
 

@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">My Application</string>
+    <string name="signUp">SIGN UP</string>
+    <string name="signIn">SIGN IN</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="linkSignUp">No account yet? Create one</string>
+    <string name="forgotPassword">Forgot password?</string>
+    <string name="username">Username</string>
+    <string name="reset_password">RESET password</string>
+    <string name="email_request">Please enter your registered email</string>
+    <string name="send_password">Password reset email sent</string>
+    <string name="error_resetpass">Error in sending password reset email</string>
+
 </resources>

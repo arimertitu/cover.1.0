@@ -22,12 +22,12 @@
             android:layout_gravity="center_horizontal" />
 
         <com.rengwuxian.materialedittext.MaterialEditText
-            android:id="@+id/txtUsername"
+            android:id="@+id/edtUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:inputType="text"
-            android:hint="Username"
+            android:hint="@string/username"
             android:textColor="@android:color/white"
             android:textColorHint="@android:color/white"
             android:textSize="20sp"
@@ -39,12 +39,12 @@
             />
 
         <com.rengwuxian.materialedittext.MaterialEditText
-            android:id="@+id/txtEmail"
+            android:id="@+id/edtEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:inputType="text"
-            android:hint="Email"
+            android:hint="@string/email"
             android:textColor="@android:color/white"
             android:textColorHint="@android:color/white"
             android:textSize="20sp"
@@ -56,12 +56,12 @@
             />
 
         <com.rengwuxian.materialedittext.MaterialEditText
-            android:id="@+id/txtPassword"
+            android:id="@+id/edtPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:layout_marginTop="8dp"
-            android:hint="Password"
+            android:hint="@string/password"
             android:textColor="@android:color/white"
             android:textColorHint="@android:color/white"
             android:textSize="20sp"
@@ -73,12 +73,14 @@
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_signUp"
+            android:background="@drawable/button_style"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="24dp"
             android:padding="12dp"
-            android:text="SIGN UP"/>
+            android:textColor="@color/colorPrimaryDark"
+            android:text="@string/signUp"/>
 
 
 
