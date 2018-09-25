@@ -39,6 +39,7 @@ public class LoginActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
+<<<<<<< HEAD
 
 
 
@@ -46,6 +47,14 @@ public class LoginActivity extends AppCompatActivity {
             finish();
             startActivity(new Intent(LoginActivity.this,UserInfoActivity.class));
         }
+=======
+//
+//      !!!!!!!!!BU KOD YORUM SATIRINDAN CIKARILACAK !!!!!!!
+//        if (firebaseUser != null){
+//            finish();
+//            startActivity(new Intent(LoginActivity.this,MainActivity.class));
+//        }
+>>>>>>> ad720f095a754d081e5e0523d4895231de92d78c
 
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,21 +104,37 @@ public class LoginActivity extends AppCompatActivity {
 
     private void validate(String user_email,String user_password){
 
+<<<<<<< HEAD
 
+=======
+//        user_email = edtEmail.getText().toString().trim();
+//        user_password= edtPassword.getText().toString().trim();
+>>>>>>> ad720f095a754d081e5e0523d4895231de92d78c
 
         firebaseAuth.signInWithEmailAndPassword(user_email,user_password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
 
                 if (task.isSuccessful()) {
+<<<<<<< HEAD
 
+=======
+                    //Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+>>>>>>> ad720f095a754d081e5e0523d4895231de92d78c
                     checkEmailVerification();
 
 
                 } else {
+<<<<<<< HEAD
             Toast.makeText(LoginActivity.this, "Login Failed!", Toast.LENGTH_SHORT).show();
         }
     }
+=======
+                    //checkEmailVerification();
+                    Toast.makeText(LoginActivity.this, "Login Failed!", Toast.LENGTH_SHORT).show();
+                }
+            }
+>>>>>>> ad720f095a754d081e5e0523d4895231de92d78c
 
 });
 
