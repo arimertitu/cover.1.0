@@ -35,19 +35,19 @@ public class LoginActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
-
-
-        if (firebaseUser != null){
-            finish();
-            startActivity(new Intent(LoginActivity.this,MainActivity.class));
-        }
+//
+//      !!!!!!!!!BU KOD YORUM SATIRINDAN CIKARILACAK !!!!!!!
+//        if (firebaseUser != null){
+//            finish();
+//            startActivity(new Intent(LoginActivity.this,MainActivity.class));
+//        }
 
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 if (checkValidate()) {
-                    validate(edtEmail.getText().toString(), edtPassword.getText().toString());
+                    validate(edtEmail.getText().toString().trim(), edtPassword.getText().toString().trim());
                 }
             }
         });
@@ -90,16 +90,20 @@ public class LoginActivity extends AppCompatActivity {
 
     private void validate(String user_email,String user_password){
 
+//        user_email = edtEmail.getText().toString().trim();
+//        user_password= edtPassword.getText().toString().trim();
+
         firebaseAuth.signInWithEmailAndPassword(user_email,user_password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
 
                 if (task.isSuccessful()) {
-                    //Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
                     checkEmailVerification();
 
 
                 } else {
+                    //checkEmailVerification();
                     Toast.makeText(LoginActivity.this, "Login Failed!", Toast.LENGTH_SHORT).show();
                 }
             }
