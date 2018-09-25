@@ -22,8 +22,8 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 public class LoginActivity extends AppCompatActivity {
 
     private Button btnSignIn;
-    private MaterialEditText edtPassword,edtEmail;
-    private TextView linkSignUp,linkForgotPassword;
+    private MaterialEditText edtPassword, edtEmail;
+    private TextView linkSignUp, linkForgotPassword;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
 
@@ -33,28 +33,17 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
 
-
-
         setupUIViews();
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
-<<<<<<< HEAD
 
-
-
-        if (firebaseUser != null){
-            finish();
-            startActivity(new Intent(LoginActivity.this,UserInfoActivity.class));
-        }
-=======
 //
-//      !!!!!!!!!BU KOD YORUM SATIRINDAN CIKARILACAK !!!!!!!
-//        if (firebaseUser != null){
+//        if (firebaseUser != null) {
 //            finish();
-//            startActivity(new Intent(LoginActivity.this,MainActivity.class));
+//            startActivity(new Intent(LoginActivity.this, UserInfoActivity.class));
 //        }
->>>>>>> ad720f095a754d081e5e0523d4895231de92d78c
+//
 
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent i = new Intent(LoginActivity.this,RegisterActivity.class);
+                Intent i = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(i);
 
             }
@@ -79,76 +68,64 @@ public class LoginActivity extends AppCompatActivity {
         linkForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(LoginActivity.this,ResetPasswordActivity.class);
+                Intent i = new Intent(LoginActivity.this, ResetPasswordActivity.class);
                 startActivity(i);
             }
         });
 
 
-
-
-
-
     }
 
-    private void setupUIViews(){
+    private void setupUIViews() {
 
-        btnSignIn = (Button)findViewById(R.id.btn_signIn);
-        edtPassword = (MaterialEditText)findViewById(R.id.edtPassword);
-        edtEmail = (MaterialEditText)findViewById(R.id.edtEmail);
+        btnSignIn = (Button) findViewById(R.id.btn_signIn);
+        edtPassword = (MaterialEditText) findViewById(R.id.edtPassword);
+        edtEmail = (MaterialEditText) findViewById(R.id.edtEmail);
         linkSignUp = (TextView) findViewById(R.id.link_signup);
         linkForgotPassword = (TextView) findViewById(R.id.link_forgotpassword);
 
     }
 
 
-    private void validate(String user_email,String user_password){
+    private void validate(String user_email, String user_password) {
 
-<<<<<<< HEAD
 
-=======
 //        user_email = edtEmail.getText().toString().trim();
 //        user_password= edtPassword.getText().toString().trim();
->>>>>>> ad720f095a754d081e5e0523d4895231de92d78c
 
-        firebaseAuth.signInWithEmailAndPassword(user_email,user_password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+
+        firebaseAuth.signInWithEmailAndPassword(user_email, user_password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
 
                 if (task.isSuccessful()) {
-<<<<<<< HEAD
 
-=======
+
                     //Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
->>>>>>> ad720f095a754d081e5e0523d4895231de92d78c
+
                     checkEmailVerification();
 
 
                 } else {
-<<<<<<< HEAD
-            Toast.makeText(LoginActivity.this, "Login Failed!", Toast.LENGTH_SHORT).show();
-        }
-    }
-=======
-                    //checkEmailVerification();
+
                     Toast.makeText(LoginActivity.this, "Login Failed!", Toast.LENGTH_SHORT).show();
                 }
             }
->>>>>>> ad720f095a754d081e5e0523d4895231de92d78c
 
-});
+
+        });
 
     }
 
-    private Boolean checkValidate(){
+    private Boolean checkValidate() {
         Boolean result = false;
 
         String email = edtEmail.getText().toString();
         String password = edtPassword.getText().toString();
 
-        if (email.isEmpty() || password.isEmpty()){
-            Toast.makeText(LoginActivity.this,"Please enter email and password",Toast.LENGTH_SHORT).show();
-        }else {
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(LoginActivity.this, "Please enter email and password", Toast.LENGTH_SHORT).show();
+        } else {
             result = true;
         }
 
@@ -160,13 +137,13 @@ public class LoginActivity extends AppCompatActivity {
         firebaseUser = firebaseAuth.getCurrentUser();
         Boolean emailFlag = firebaseUser.isEmailVerified();
 
-        if (emailFlag){
-            Toast.makeText(LoginActivity.this,"Login Succesfuly!",Toast.LENGTH_SHORT).show();
+        if (emailFlag) {
+            Toast.makeText(LoginActivity.this, "Login Succesfuly!", Toast.LENGTH_SHORT).show();
             finish();
-            startActivity(new Intent(LoginActivity.this,UserInfoActivity.class));
-        }else {
-            Toast.makeText(LoginActivity.this,"Verify your email!",Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(LoginActivity.this, UserInfoActivity.class));
+        } else {
+            Toast.makeText(LoginActivity.this, "Verify your email!", Toast.LENGTH_SHORT).show();
             firebaseAuth.signOut();
         }
     }
-    }
+}

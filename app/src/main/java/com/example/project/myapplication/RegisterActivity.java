@@ -15,6 +15,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -23,6 +25,8 @@ public class RegisterActivity extends AppCompatActivity {
     private MaterialEditText edtPassword,edtUsername,edtEmail;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
+    private DatabaseReference databaseReference;
+    private String username,email,password;
 
 
     @Override
@@ -42,14 +46,35 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (validate()){
-                    String user_email = edtEmail.getText().toString().trim();
+                    final String user_email = edtEmail.getText().toString().trim();
                     String user_password = edtPassword.getText().toString().trim();
 
                     firebaseAuth.createUserWithEmailAndPassword(user_email,user_password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                sendEmailVerification();
+                                String user_id = firebaseAuth.getCurrentUser().getUid();
+                                databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(user_id);
+
+                                databaseReference.child("username").setValue(username);
+                                databaseReference.child("email").setValue(email);
+                                databaseReference.child("password").setValue(password);
+                                databaseReference.child("name").setValue("");
+                                databaseReference.child("surname").setValue("");
+                                databaseReference.child("gender").setValue("");
+                                databaseReference.child("birthday").setValue("");
+                                databaseReference.child("bio").setValue("").addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()){
+                                            sendEmailVerification();
+                                        }else {
+                                            Toast.makeText(RegisterActivity.this, "Server is busy!", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+
+
                             }else {
                                 Toast.makeText(RegisterActivity.this, R.string.register_fail, Toast.LENGTH_SHORT).show();
                             }
@@ -72,9 +97,9 @@ public class RegisterActivity extends AppCompatActivity {
     private Boolean validate(){
         Boolean result = false;
 
-        String username = edtUsername.getText().toString();
-        String email = edtEmail.getText().toString();
-        String password = edtPassword.getText().toString();
+        username = edtUsername.getText().toString();
+        email = edtEmail.getText().toString();
+        password = edtPassword.getText().toString();
 
         if (username.isEmpty() || email.isEmpty() || password.isEmpty()){
 
@@ -94,7 +119,7 @@ public class RegisterActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()){
-                        Toast.makeText(RegisterActivity.this,"Successfully Registered, Verification mail sent!",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterActivity.this,"Successfully Registered, Verification mail sent!",Toast.LENGTH_LONG).show();
                         firebaseAuth.signOut();
                         finish();
                         startActivity(new Intent(RegisterActivity.this,LoginActivity.class));
