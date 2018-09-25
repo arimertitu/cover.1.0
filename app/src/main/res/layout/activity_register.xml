@@ -7,11 +7,15 @@
     android:background="@color/colorPrimary"
     tools:context=".LoginActivity">
 
+    <include android:id="@+id/register_toolbar"
+        layout="@layout/toolbar">
+    </include>
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="56dp"
+        android:paddingTop="64dp"
         android:paddingLeft="24dp"
         android:paddingRight="24dp">
 

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -31,15 +32,19 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+
+
+
         setupUIViews();
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
 
 
+
         if (firebaseUser != null){
             finish();
-            startActivity(new Intent(LoginActivity.this,MainActivity.class));
+            startActivity(new Intent(LoginActivity.this,UserInfoActivity.class));
         }
 
         btnSignIn.setOnClickListener(new View.OnClickListener() {
@@ -47,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (checkValidate()) {
-                    validate(edtEmail.getText().toString(), edtPassword.getText().toString());
+                    validate(edtEmail.getText().toString().trim(), edtPassword.getText().toString().trim());
                 }
             }
         });
@@ -90,21 +95,23 @@ public class LoginActivity extends AppCompatActivity {
 
     private void validate(String user_email,String user_password){
 
+
+
         firebaseAuth.signInWithEmailAndPassword(user_email,user_password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
 
                 if (task.isSuccessful()) {
-                    //Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+
                     checkEmailVerification();
 
 
                 } else {
-                    Toast.makeText(LoginActivity.this, "Login Failed!", Toast.LENGTH_SHORT).show();
-                }
-            }
+            Toast.makeText(LoginActivity.this, "Login Failed!", Toast.LENGTH_SHORT).show();
+        }
+    }
 
-        });
+});
 
     }
 
@@ -131,7 +138,7 @@ public class LoginActivity extends AppCompatActivity {
         if (emailFlag){
             Toast.makeText(LoginActivity.this,"Login Succesfuly!",Toast.LENGTH_SHORT).show();
             finish();
-            startActivity(new Intent(LoginActivity.this,MainActivity.class));
+            startActivity(new Intent(LoginActivity.this,UserInfoActivity.class));
         }else {
             Toast.makeText(LoginActivity.this,"Verify your email!",Toast.LENGTH_SHORT).show();
             firebaseAuth.signOut();
