@@ -18,8 +18,11 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.Calendar;
@@ -98,28 +101,37 @@ public class UserInfoActivity extends AppCompatActivity {
                 surname = edtSurname.getText().toString();
                 birthday = txtBirthday.getText().toString();
 
-                String user_id =firebaseAuth.getCurrentUser().getUid();
-                databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(user_id);
+                if (checkValidate()) {
 
-                databaseReference.child("name").setValue(name);
-                databaseReference.child("surname").setValue(surname);
-                databaseReference.child("gender").setValue(gender);
-                databaseReference.child("birthday").setValue(birthday).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()){
-                            startActivity(new Intent(UserInfoActivity.this,MainActivity.class));
-                        }else {
-                            Toast.makeText(UserInfoActivity.this,"Server is busy ",Toast.LENGTH_SHORT).show();
+                    final String user_id = firebaseAuth.getCurrentUser().getUid();
+                    databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(user_id);
+
+
+
+                    databaseReference.child("name").setValue(name);
+                    databaseReference.child("surname").setValue(surname);
+                    databaseReference.child("gender").setValue(gender);
+                    databaseReference.child("birthday").setValue(birthday).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                startActivity(new Intent(UserInfoActivity.this, MainActivity.class));
+                            } else {
+                                Toast.makeText(UserInfoActivity.this, "Server is busy ", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
+                    });
+                }else {
+                    Toast.makeText(UserInfoActivity.this,"Please enter all user information",Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
 
 
     }
+
+
 
     private void setupUIViews() {
 
@@ -133,5 +145,19 @@ public class UserInfoActivity extends AppCompatActivity {
 
 
 
+    }
+
+    private Boolean checkValidate() {
+        Boolean result = false;
+
+
+
+        if (name.isEmpty() || surname.isEmpty() || birthday.isEmpty() || gender.isEmpty()) {
+            Toast.makeText(UserInfoActivity.this, "Please enter all user information", Toast.LENGTH_SHORT).show();
+        } else {
+            result = true;
+        }
+
+        return result;
     }
 }

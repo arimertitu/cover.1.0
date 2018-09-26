@@ -22,11 +22,11 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 public class RegisterActivity extends AppCompatActivity {
 
     private Button btnSignUp;
-    private MaterialEditText edtPassword,edtUsername,edtEmail;
+    private MaterialEditText edtPassword, edtUsername, edtEmail;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
     private DatabaseReference databaseReference;
-    private String username,email,password;
+    private String username, email, password;
 
 
     @Override
@@ -45,11 +45,11 @@ public class RegisterActivity extends AppCompatActivity {
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (validate()){
+                if (validate()) {
                     final String user_email = edtEmail.getText().toString().trim();
                     String user_password = edtPassword.getText().toString().trim();
 
-                    firebaseAuth.createUserWithEmailAndPassword(user_email,user_password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    firebaseAuth.createUserWithEmailAndPassword(user_email, user_password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
@@ -58,24 +58,20 @@ public class RegisterActivity extends AppCompatActivity {
 
                                 databaseReference.child("username").setValue(username);
                                 databaseReference.child("email").setValue(email);
-                                databaseReference.child("password").setValue(password);
-                                databaseReference.child("name").setValue("");
-                                databaseReference.child("surname").setValue("");
-                                databaseReference.child("gender").setValue("");
-                                databaseReference.child("birthday").setValue("");
-                                databaseReference.child("bio").setValue("").addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()){
-                                            sendEmailVerification();
-                                        }else {
-                                            Toast.makeText(RegisterActivity.this, "Server is busy!", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                });
+                                databaseReference.child("password").setValue(password)
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    sendEmailVerification();
+                                                } else {
+                                                    Toast.makeText(RegisterActivity.this, "Server is busy!", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
 
 
-                            }else {
+                            } else {
                                 Toast.makeText(RegisterActivity.this, R.string.register_fail, Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -94,17 +90,17 @@ public class RegisterActivity extends AppCompatActivity {
         edtUsername = (MaterialEditText) findViewById(R.id.edtUsername);
     }
 
-    private Boolean validate(){
+    private Boolean validate() {
         Boolean result = false;
 
         username = edtUsername.getText().toString();
         email = edtEmail.getText().toString();
         password = edtPassword.getText().toString();
 
-        if (username.isEmpty() || email.isEmpty() || password.isEmpty()){
+        if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
 
             Toast.makeText(RegisterActivity.this, R.string.enter_details, Toast.LENGTH_SHORT).show();
-        }else {
+        } else {
             result = true;
         }
 
@@ -114,25 +110,23 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void sendEmailVerification() {
         firebaseUser = firebaseAuth.getCurrentUser();
-        if (firebaseUser != null){
+        if (firebaseUser != null) {
             firebaseUser.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()){
-                        Toast.makeText(RegisterActivity.this,"Successfully Registered, Verification mail sent!",Toast.LENGTH_LONG).show();
+                    if (task.isSuccessful()) {
+                        Toast.makeText(RegisterActivity.this, "Successfully Registered, Verification mail sent!", Toast.LENGTH_LONG).show();
                         firebaseAuth.signOut();
                         finish();
-                        startActivity(new Intent(RegisterActivity.this,LoginActivity.class));
-                    }else {
-                        Toast.makeText(RegisterActivity.this,"Verification mail has'nt been sent!",Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                    } else {
+                        Toast.makeText(RegisterActivity.this, "Verification mail has'nt been sent!", Toast.LENGTH_SHORT).show();
 
                     }
 
                 }
             });
         }
-
-
 
 
     }
