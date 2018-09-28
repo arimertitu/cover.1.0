@@ -45,11 +45,11 @@ public class LoginActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
 
-//
-//        if (firebaseUser != null) {
-//            finish();
-//            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-//        }
+
+        if (firebaseUser != null) {
+            finish();
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        }
 
 
         btnSignIn.setOnClickListener(new View.OnClickListener() {

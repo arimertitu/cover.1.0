@@ -3,4 +3,6 @@
     <color name="colorPrimary">#4A148C</color>
     <color name="colorPrimaryDark">#4A148C</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="biocolor">#EDE7F6</color>
+    <color name="bioüst">#4A148C</color>
 </resources>
