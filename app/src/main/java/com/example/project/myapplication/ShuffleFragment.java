@@ -1,7 +1,7 @@
 package com.example.project.myapplication;
 
-import android.content.Context;
-import android.net.Uri;
+
+
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,13 +10,18 @@ import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import de.hdodenhof.circleimageview.CircleImageView;
+import android.widget.Button;
+import android.widget.TextView;
 
 
 public class ShuffleFragment extends Fragment {
 
     private AppCompatButton btnShuffle;
+    private TextView txtLocation;
+    private String countryLocation;
+    private AppCompatButton btnSelectCountry;
+
+
 
 
     public ShuffleFragment() {
@@ -42,6 +47,11 @@ public class ShuffleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+        MainActivity activity = (MainActivity) getActivity();
+        countryLocation = activity.country();
+
+
         return inflater.inflate(R.layout.fragment_shuffle, container, false);
 
     }
@@ -49,8 +59,7 @@ public class ShuffleFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        btnShuffle = (AppCompatButton) getView().findViewById(R.id.btnShuffle);
+        setupUIViews();
 
         btnShuffle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,5 +68,25 @@ public class ShuffleFragment extends Fragment {
             }
         });
 
+        btnSelectCountry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                
+            }
+        });
+
+        txtLocation.setText(countryLocation);
+
+
     }
+
+    private void setupUIViews(){
+
+        txtLocation = (TextView) getView().findViewById(R.id.txtLocation);
+        btnShuffle = (AppCompatButton) getView().findViewById(R.id.btnShuffle);
+        btnSelectCountry = (AppCompatButton) getView().findViewById(R.id.btnSelectLocation);
+
+
+    }
+
 }

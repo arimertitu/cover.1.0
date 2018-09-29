@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.rengwuxian.materialedittext.MaterialEditText;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -28,7 +29,8 @@ public class ProfileFragment extends Fragment {
 
     private TextView txtTitle;
     private CircleImageView imgProfile;
-    private TextView txtDisplayUsername;
+    private TextView txtDisplayUsername,txtBio;
+    private MaterialEditText edtBio;
     private TextView txtDisplayName;
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;

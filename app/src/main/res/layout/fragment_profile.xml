@@ -72,7 +72,7 @@
         android:layout_height="wrap_content">
 
         <com.rengwuxian.materialedittext.MaterialEditText
-            android:id="@+id/txtBio"
+            android:id="@+id/edtBio"
             android:layout_margin="16dp"
             android:hint="About you!"
             android:background="@android:color/white"
