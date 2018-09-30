@@ -1,10 +1,10 @@
 package com.example.project.myapplication;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,9 +12,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,7 +42,6 @@ public class ProfileFragment extends Fragment {
     }
 
 
-    // TODO: Rename and change types and number of parameters
     public static ProfileFragment newInstance() {
         ProfileFragment fragmentProfile = new ProfileFragment();
         return fragmentProfile;
@@ -52,6 +51,11 @@ public class ProfileFragment extends Fragment {
         imgProfile = (CircleImageView) getView().findViewById(R.id.imgProfile);
         txtDisplayName = (TextView) getView().findViewById(R.id.txtName);
         txtDisplayUsername = (TextView) getView().findViewById(R.id.txtUsername);
+
+        Toolbar toolbar = getView().findViewById(R.id.profile_toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Profile");
+
 
         firebaseAuth = FirebaseAuth.getInstance();
         user_id = firebaseAuth.getCurrentUser().getUid();
@@ -96,6 +100,51 @@ public class ProfileFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }
 
+    @Override
+    public void onStart(){
+        super.onStart();
+
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        if (currentUser == null){
+            LogOutUser();
+        }
+
+    }
+
+    private void LogOutUser() {
+
+        startActivity(new Intent(getActivity(),LoginActivity.class));
 
 
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        getActivity().getMenuInflater().inflate(R.menu.profile_menu,menu);
+        super.onCreateOptionsMenu(menu, inflater);
+
+        return;
+
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.profile_menu_logout){
+            firebaseAuth.signOut();
+
+            LogOutUser();
+        }
+
+        if (item.getItemId() == R.id.profile_menu_setting){
+            startActivity(new Intent(getActivity(),SettingActivity.class));
+
+        }
+
+
+        return true;
+    }
 }

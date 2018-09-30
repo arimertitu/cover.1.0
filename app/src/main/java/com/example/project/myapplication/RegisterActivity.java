@@ -26,7 +26,7 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private DatabaseReference databaseReference;
     private String username, email, password,premium,user_email,user_password;
-    private Users users;
+
 
 
     @Override
@@ -56,6 +56,9 @@ public class RegisterActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
 
+                                Users.username = username;
+                                Users.email = email;
+                                Users.premium = premium;
 
                                 String user_id = firebaseAuth.getCurrentUser().getUid();
                                 databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(user_id);
@@ -93,6 +96,7 @@ public class RegisterActivity extends AppCompatActivity {
         edtEmail = (MaterialEditText) findViewById(R.id.edtEmail);
         edtPassword = (MaterialEditText) findViewById(R.id.edtPassword);
         edtUsername = (MaterialEditText) findViewById(R.id.edtUsername);
+
     }
 
     private Boolean validate() {

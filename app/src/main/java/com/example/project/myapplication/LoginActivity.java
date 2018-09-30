@@ -33,6 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private String email,password;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +48,7 @@ public class LoginActivity extends AppCompatActivity {
 
         if (firebaseUser != null) {
             finish();
+
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
         }
 
@@ -173,5 +175,11 @@ public class LoginActivity extends AppCompatActivity {
             firebaseAuth.signOut();
             return false;
         }
+    }
+
+    private void firebaseUsers(){
+
+
+
     }
 }
