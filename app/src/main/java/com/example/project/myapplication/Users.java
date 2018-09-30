@@ -8,18 +8,37 @@ public class Users {
     private String birthday;
     private String gender;
     private String email;
+    private String premium;
+    private String bio;
+    private String status;
+
+    public String getPremium() {
+        return premium;
+    }
+
+    public void setPremium(String premium) {
+        this.premium = premium;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public Users() {
     }
 
-    public Users(String name, String surname, String username, String birthday, String gender, String email) {
-        this.name = name;
-        this.surname = surname;
-        this.username = username;
-        this.birthday = birthday;
-        this.gender = gender;
-        this.email = email;
-    }
 
     public String getName() {
         return name;

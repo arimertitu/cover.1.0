@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -26,7 +25,8 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
     private DatabaseReference databaseReference;
-    private String username, email, password;
+    private String username, email, password,premium,user_email,user_password;
+    private Users users;
 
 
     @Override
@@ -46,18 +46,23 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (validate()) {
-                    final String user_email = edtEmail.getText().toString().trim();
-                    String user_password = edtPassword.getText().toString().trim();
+                    user_email = edtEmail.getText().toString().trim();
+                    user_password = edtPassword.getText().toString().trim();
+                    premium ="0";
+
 
                     firebaseAuth.createUserWithEmailAndPassword(user_email, user_password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
+
+
                                 String user_id = firebaseAuth.getCurrentUser().getUid();
                                 databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(user_id);
 
                                 databaseReference.child("username").setValue(username);
                                 databaseReference.child("email").setValue(email);
+                                databaseReference.child("premium").setValue(premium);
                                 databaseReference.child("password").setValue(password)
                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override

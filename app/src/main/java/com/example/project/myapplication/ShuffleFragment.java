@@ -10,16 +10,20 @@ import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
+import com.mukesh.countrypicker.Country;
+import com.mukesh.countrypicker.CountryPicker;
+import com.mukesh.countrypicker.OnCountryPickerListener;
 
-public class ShuffleFragment extends Fragment {
+
+public class ShuffleFragment extends Fragment implements OnCountryPickerListener {
 
     private AppCompatButton btnShuffle;
     private TextView txtLocation;
     private String countryLocation;
     private AppCompatButton btnSelectCountry;
+    private CountryPicker countryPicker;
 
 
 
@@ -59,11 +63,25 @@ public class ShuffleFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         setupUIViews();
 
+        txtLocation.setText(countryLocation);
+
+        setClickListener();
+
+
+
+
+
+
+    }
+
+    private void setClickListener() {
         btnShuffle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
 
             }
         });
@@ -71,12 +89,10 @@ public class ShuffleFragment extends Fragment {
         btnSelectCountry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
+
+                countryPicker.showDialog(getFragmentManager());
             }
         });
-
-        txtLocation.setText(countryLocation);
-
 
     }
 
@@ -85,8 +101,15 @@ public class ShuffleFragment extends Fragment {
         txtLocation = (TextView) getView().findViewById(R.id.txtLocation);
         btnShuffle = (AppCompatButton) getView().findViewById(R.id.btnShuffle);
         btnSelectCountry = (AppCompatButton) getView().findViewById(R.id.btnSelectLocation);
+        countryPicker = new CountryPicker.Builder().with(getActivity()).listener(this).build();
 
 
     }
 
+    @Override
+    public void onSelectCountry(Country country) {
+
+        txtLocation.setText(country.getName());
+
+    }
 }
