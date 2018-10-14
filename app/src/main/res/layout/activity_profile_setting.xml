@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/biocolor"
+    tools:context="com.example.project.myapplication.ProfileFragment">
+
+
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            android:id="@+id/collapsing"
+            app:contentScrim="?attr/colorPrimaryDark"
+            android:fitsSystemWindows="true"
+            app:collapsedTitleTextAppearance="@style/CollapsedAppBar"
+            app:expandedTitleTextAppearance="@style/ToolbarAppBar"
+            android:background="@color/colorPrimaryDark"
+            android:layout_height="300dp">
+
+            <ImageView
+                android:src="@drawable/pp"
+                app:layout_collapseMode="parallax"
+                android:contentDescription="@null"
+                android:scaleType="centerCrop"
+                android:id="@+id/imgProfile"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbarId"
+                app:title="About You"
+                app:subtitleTextColor="@color/colorPrimaryDark"
+                app:layout_collapseMode="parallax"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                android:theme="@style/AppTheme.Patient"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize">
+
+
+            </android.support.v7.widget.Toolbar>
+
+
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btnChangePhoto"
+        android:src="@drawable/ic_add_a_photo_black_24dp"
+        android:backgroundTint="@android:color/white"
+        android:elevation="6dp"
+        app:pressedTranslationZ="12dp"
+        app:layout_anchor="@id/appbar"
+        app:layout_anchorGravity="bottom|right|end"
+        app:useCompatPadding="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <android.support.v4.widget.NestedScrollView
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:clipToPadding="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.CardView
+                android:backgroundTint="@color/biocolor"
+                android:layout_marginTop="24dp"
+                app:cardUseCompatPadding="true"
+                app:cardElevation="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:background="@color/biocolor"
+                    android:layout_margin="8dp"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:gravity="center"
+                        android:text="Profile Setting"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+
+                    <com.rengwuxian.materialedittext.MaterialEditText
+
+                    android:id="@+id/edtName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:hint="Name"
+                    android:inputType="textPersonName"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="16sp"
+                    app:met_baseColor="@color/colorPrimaryDark"
+                    app:met_floatingLabel="highlight"
+                    app:met_primaryColor="@color/colorPrimaryDark"
+                    app:met_singleLineEllipsis="true"
+                    app:met_textColorHint="@android:color/black" />
+
+                    <com.rengwuxian.materialedittext.MaterialEditText
+
+                    android:id="@+id/edtSurname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:hint="Surname"
+                    android:inputType="text"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="16sp"
+                    app:met_baseColor="@color/colorPrimaryDark"
+                    app:met_floatingLabel="highlight"
+                    app:met_primaryColor="@color/colorPrimaryDark"
+                    app:met_singleLineEllipsis="true"
+                    app:met_textColorHint="@android:color/black" />
+
+                    <com.rengwuxian.materialedittext.MaterialEditText
+
+                    android:id="@+id/edtUsername"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:hint="Username"
+                    android:inputType="text"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="16sp"
+                    app:met_baseColor="@color/colorPrimaryDark"
+                    app:met_floatingLabel="highlight"
+                    app:met_primaryColor="@color/colorPrimaryDark"
+                    app:met_singleLineEllipsis="true"
+                    app:met_textColorHint="@android:color/black" />
+
+
+
+
+                </LinearLayout>
+
+
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:backgroundTint="@color/biocolor"
+                android:layout_marginTop="24dp"
+                app:cardUseCompatPadding="true"
+                app:cardElevation="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/edtBio"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@android:color/white"
+                    android:hint="About you!"
+                    android:inputType="text"
+                    android:textColor="@color/colorPrimaryDark"
+                    app:met_baseColor="@color/colorPrimaryDark"
+                    app:met_floatingLabel="highlight"
+                    app:met_primaryColor="@color/colorPrimaryDark"
+                    app:met_singleLineEllipsis="true" />
+
+            </android.support.v7.widget.CardView>
+            <android.support.v7.widget.CardView
+                android:layout_marginTop="24dp"
+                android:backgroundTint="@color/biocolor"
+                app:cardUseCompatPadding="true"
+                app:cardElevation="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:background="@color/biocolor"
+                    android:layout_margin="8dp"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:gravity="center"
+                        android:text="Account Setting"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <RadioGroup
+                        android:id="@+id/gender"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/gender_male"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="8dp"
+                            android:layout_marginBottom="12dp"
+                            android:checked="true"
+                            android:text="Male"
+                            android:textColor="@color/colorPrimaryDark" />
+
+                        <RadioButton
+                            android:id="@+id/gender_female"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:checked="true"
+                            android:text="Female"
+                            android:textColor="@color/colorPrimaryDark" />
+                    </RadioGroup>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:text="Change Birthday:"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:orientation="horizontal">
+
+
+
+                        <TextView
+                            android:id="@+id/txtbirthday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:hint="DD/MM/YYYY"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textColorHint="@color/colorPrimaryDark"
+                            android:textSize="16sp" />
+
+                        <ImageButton
+                            android:id="@+id/btnChangeDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16dp"
+                            android:src="@drawable/ic_date_range_black_24dp" />
+
+
+                    </LinearLayout>
+                </LinearLayout>
+
+
+            </android.support.v7.widget.CardView>
+
+
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btnSave"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/button_style_dark"
+                android:text="Save"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+
+
+
+    </android.support.v4.widget.NestedScrollView>
+
+
+
+
+
+</android.support.design.widget.CoordinatorLayout>
+
+<!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:background="@color/biocolor"-->
+    <!--tools:context="com.example.project.myapplication.ProfileFragment">-->
+
+
+    <!--<ImageButton-->
+        <!--android:id="@+id/btnBackProfile"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginLeft="8dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:layout_marginRight="8dp"-->
+        <!--android:background="@color/biocolor"-->
+        <!--android:src="@drawable/ic_arrow_back_black_24dp" />-->
+
+    <!--<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
+
+
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="vertical">-->
+
+
+            <!--<LinearLayout-->
+                <!--android:id="@+id/layout1"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="300dp"-->
+                <!--android:orientation="vertical">-->
+
+                <!--<ImageView-->
+                    <!--android:id="@+id/imgProfile"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:contentDescription="@null"-->
+                    <!--android:scaleType="centerCrop"-->
+                    <!--app:layout_collapseMode="parallax" />-->
+
+                <!--<android.support.design.widget.FloatingActionButton-->
+                    <!--android:id="@+id/btnChangePhoto"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:baselineAlignBottom="true"-->
+                    <!--android:layout_gravity="bottom|right|end"-->
+                    <!--android:backgroundTint="@color/biocolor"-->
+                    <!--android:elevation="6dp"-->
+                    <!--android:src="@drawable/ic_add_a_photo_black_24dp"-->
+                    <!--app:pressedTranslationZ="12dp"-->
+                    <!--app:useCompatPadding="true" />-->
+
+
+            <!--</LinearLayout>-->
+
+
+            <!--<LinearLayout-->
+                <!--android:id="@+id/layout3"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="16dp"-->
+                <!--android:layout_marginTop="8dp"-->
+                <!--android:layout_marginRight="16dp"-->
+                <!--android:orientation="vertical"-->
+                <!--android:weightSum="1">-->
+
+
+                <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:gravity="center"-->
+                    <!--android:text="Profile Setting"-->
+                    <!--android:textColor="@color/colorPrimaryDark"-->
+                    <!--android:textSize="16sp"-->
+                    <!--android:textStyle="bold" />-->
+
+
+                <!--<com.rengwuxian.materialedittext.MaterialEditText-->
+
+                    <!--android:id="@+id/edtName"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginBottom="8dp"-->
+                    <!--android:hint="Name"-->
+                    <!--android:inputType="textPersonName"-->
+                    <!--android:textColor="@color/colorPrimaryDark"-->
+                    <!--android:textSize="16sp"-->
+                    <!--app:met_baseColor="@color/colorPrimaryDark"-->
+                    <!--app:met_floatingLabel="highlight"-->
+                    <!--app:met_primaryColor="@color/colorPrimaryDark"-->
+                    <!--app:met_singleLineEllipsis="true"-->
+                    <!--app:met_textColorHint="@android:color/black" />-->
+
+                <!--<com.rengwuxian.materialedittext.MaterialEditText-->
+
+                    <!--android:id="@+id/edtSurname"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="8dp"-->
+                    <!--android:hint="Surname"-->
+                    <!--android:inputType="text"-->
+                    <!--android:textColor="@color/colorPrimaryDark"-->
+                    <!--android:textSize="16sp"-->
+                    <!--app:met_baseColor="@color/colorPrimaryDark"-->
+                    <!--app:met_floatingLabel="highlight"-->
+                    <!--app:met_primaryColor="@color/colorPrimaryDark"-->
+                    <!--app:met_singleLineEllipsis="true"-->
+                    <!--app:met_textColorHint="@android:color/black" />-->
+
+                <!--<com.rengwuxian.materialedittext.MaterialEditText-->
+
+                    <!--android:id="@+id/edtUsername"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="8dp"-->
+                    <!--android:hint="Username"-->
+                    <!--android:inputType="text"-->
+                    <!--android:textColor="@color/colorPrimaryDark"-->
+                    <!--android:textSize="16sp"-->
+                    <!--app:met_baseColor="@color/colorPrimaryDark"-->
+                    <!--app:met_floatingLabel="highlight"-->
+                    <!--app:met_primaryColor="@color/colorPrimaryDark"-->
+                    <!--app:met_singleLineEllipsis="true"-->
+                    <!--app:met_textColorHint="@android:color/black" />-->
+
+
+                <!--<com.rengwuxian.materialedittext.MaterialEditText-->
+                    <!--android:id="@+id/edtBio"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="120dp"-->
+                    <!--android:layout_marginTop="8dp"-->
+                    <!--android:layout_marginBottom="16dp"-->
+                    <!--android:background="@android:color/white"-->
+                    <!--android:hint="About you!"-->
+                    <!--android:inputType="text"-->
+                    <!--android:textColor="@color/colorPrimaryDark"-->
+                    <!--app:met_baseColor="@color/colorPrimaryDark"-->
+                    <!--app:met_floatingLabel="highlight"-->
+                    <!--app:met_primaryColor="@color/colorPrimaryDark"-->
+                    <!--app:met_singleLineEllipsis="true" />-->
+
+                <!--<TextView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginTop="16dp"-->
+    <!--android:layout_marginBottom="16dp"-->
+    <!--android:gravity="center"-->
+    <!--android:text="Account Setting"-->
+    <!--android:textColor="@color/colorPrimaryDark"-->
+    <!--android:textSize="16sp"-->
+    <!--android:textStyle="bold" />-->
+
+    <!--<RadioGroup-->
+    <!--android:id="@+id/gender"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:orientation="horizontal">-->
+
+    <!--<RadioButton-->
+    <!--android:id="@+id/gender_male"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginRight="8dp"-->
+    <!--android:layout_marginBottom="12dp"-->
+    <!--android:checked="true"-->
+    <!--android:text="Male"-->
+    <!--android:textColor="@color/colorPrimaryDark" />-->
+
+    <!--<RadioButton-->
+    <!--android:id="@+id/gender_female"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginLeft="8dp"-->
+    <!--android:checked="true"-->
+    <!--android:text="Female"-->
+    <!--android:textColor="@color/colorPrimaryDark" />-->
+    <!--</RadioGroup>-->
+
+    <!--<TextView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginBottom="12dp"-->
+    <!--android:text="Change Birthday:"-->
+    <!--android:textColor="@color/colorPrimaryDark"-->
+    <!--android:textSize="16sp"-->
+    <!--android:textStyle="bold" />-->
+
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginBottom="16dp"-->
+                    <!--android:orientation="horizontal">-->
+
+                    <!--<TextView-->
+                        <!--android:id="@+id/txtbirthday"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_marginTop="10dp"-->
+                        <!--android:hint="DD/MM/YYYY"-->
+                        <!--android:textColor="@color/colorPrimaryDark"-->
+                        <!--android:textColorHint="@color/colorPrimaryDark"-->
+                        <!--android:textSize="16sp" />-->
+
+                    <!--<ImageButton-->
+                        <!--android:id="@+id/btnChangeDate"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_marginLeft="16dp"-->
+                        <!--android:src="@drawable/ic_date_range_black_24dp" />-->
+
+
+                <!--</LinearLayout>-->
+
+
+            <!--</LinearLayout>-->
+
+        <!--</LinearLayout>-->
+        <!--<android.support.v7.widget.AppCompatButton-->
+            <!--android:id="@+id/btnSave"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:layout_marginTop="16dp"-->
+            <!--android:layout_marginRight="8dp"-->
+            <!--android:layout_marginBottom="8dp"-->
+            <!--android:background="@drawable/button_style_dark"-->
+            <!--android:text="Save"-->
+            <!--android:textColor="@android:color/white" />-->
+    <!--</ScrollView>-->
+
+
+
+<!--</RelativeLayout>-->

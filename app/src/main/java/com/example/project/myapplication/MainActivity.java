@@ -161,6 +161,9 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+
+
                 Fragment selectedFragment = null;
 
                 switch (item.getItemId()) {
@@ -184,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_layout, ChatsFragment.newInstance());
         transaction.commit();
+
     }
 
 

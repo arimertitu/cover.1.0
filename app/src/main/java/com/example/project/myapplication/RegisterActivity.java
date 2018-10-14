@@ -1,5 +1,6 @@
 package com.example.project.myapplication;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -18,6 +20,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
+import java.util.HashMap;
+
 public class RegisterActivity extends AppCompatActivity {
 
     private Button btnSignUp;
@@ -25,7 +29,8 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
     private DatabaseReference databaseReference;
-    private String username, email, password,premium,user_email,user_password;
+    private String username, email, password,premium,user_email,user_password,user_id;
+    private ProgressDialog progressDialog;
 
 
 
@@ -33,7 +38,15 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        setupUIViews(); //xml dosya idleri bu method da
+
+        btnSignUp = (Button) findViewById(R.id.btn_signUp);
+        edtEmail = (MaterialEditText) findViewById(R.id.edtEmail);
+        edtPassword = (MaterialEditText) findViewById(R.id.edtPassword);
+        edtUsername = (MaterialEditText) findViewById(R.id.edtUsername);
+
+        progressDialog = new ProgressDialog(this);
+
+
 
         Toolbar toolbar = findViewById(R.id.register_toolbar);
         setSupportActionBar(toolbar);
@@ -41,6 +54,7 @@ public class RegisterActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         firebaseAuth = FirebaseAuth.getInstance();
+
 
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,34 +64,40 @@ public class RegisterActivity extends AppCompatActivity {
                     user_password = edtPassword.getText().toString().trim();
                     premium ="0";
 
+                    progressDialog.setTitle("Creating New Account!");
+                    progressDialog.setMessage("Please wait, while we are creating your account..");
+                    progressDialog.show();
+
 
                     firebaseAuth.createUserWithEmailAndPassword(user_email, user_password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
 
-                                Users.username = username;
-                                Users.email = email;
-                                Users.premium = premium;
-
-                                String user_id = firebaseAuth.getCurrentUser().getUid();
+                                user_id = firebaseAuth.getCurrentUser().getUid();
                                 databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(user_id);
 
-                                databaseReference.child("username").setValue(username);
-                                databaseReference.child("email").setValue(email);
-                                databaseReference.child("premium").setValue(premium);
-                                databaseReference.child("password").setValue(password)
-                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if (task.isSuccessful()) {
-                                                    sendEmailVerification();
-                                                } else {
-                                                    Toast.makeText(RegisterActivity.this, "Server is busy!", Toast.LENGTH_SHORT).show();
-                                                }
-                                            }
-                                        });
+                                HashMap userMap = new HashMap();
+                                userMap.put("username", username);
+                                userMap.put("email", email);
+                                userMap.put("premium", premium);
+                                userMap.put("password", password);
 
+                                databaseReference.updateChildren(userMap).addOnCompleteListener(new OnCompleteListener() {
+                                    @Override
+                                    public void onComplete(@NonNull Task task) {
+
+                                        if (task.isSuccessful()){
+                                            sendEmailVerification();
+
+                                        }else {
+                                            Toast.makeText(RegisterActivity.this, "Server is busy!", Toast.LENGTH_SHORT).show();
+
+                                        }
+                                        progressDialog.dismiss();
+
+                                    }
+                                });
 
                             } else {
                                 Toast.makeText(RegisterActivity.this, R.string.register_fail, Toast.LENGTH_SHORT).show();
@@ -91,13 +111,6 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
-    private void setupUIViews() {
-        btnSignUp = (Button) findViewById(R.id.btn_signUp);
-        edtEmail = (MaterialEditText) findViewById(R.id.edtEmail);
-        edtPassword = (MaterialEditText) findViewById(R.id.edtPassword);
-        edtUsername = (MaterialEditText) findViewById(R.id.edtUsername);
-
-    }
 
     private Boolean validate() {
         Boolean result = false;

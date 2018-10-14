@@ -26,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.Calendar;
+import java.util.HashMap;
 
 public class UserInfoActivity extends AppCompatActivity {
 
@@ -34,9 +35,10 @@ public class UserInfoActivity extends AppCompatActivity {
     private ImageButton btnSelectDate;
     private TextView txtBirthday;
     private RadioGroup genderGroup;
-    private String name,surname,birthday,gender;
+    private String name,surname,birthday,gender,user_id;
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +50,15 @@ public class UserInfoActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("User Information");
 
-        firebaseAuth = FirebaseAuth.getInstance();
-
-
         setupUIViews();
+
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        user_id = firebaseAuth.getCurrentUser().getUid();
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(user_id);
+
+
+
 
 
 
@@ -88,7 +95,7 @@ public class UserInfoActivity extends AppCompatActivity {
 
                 int secimgender = genderGroup.getCheckedRadioButtonId();
 
-                switch (secimgender){
+                switch (secimgender) {
                     case R.id.gender_male:
                         gender = "M";
                         break;
@@ -103,30 +110,33 @@ public class UserInfoActivity extends AppCompatActivity {
 
                 if (checkValidate()) {
 
-                    final String user_id = firebaseAuth.getCurrentUser().getUid();
-                    databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(user_id);
+                    HashMap userMap = new HashMap();
+                    userMap.put("name", name);
+                    userMap.put("surname", surname);
+                    userMap.put("birthday", birthday);
+                    userMap.put("gender",gender);
+                    userMap.put("image","");
+
+                   databaseReference.updateChildren(userMap).addOnCompleteListener(new OnCompleteListener() {
+                       @Override
+                       public void onComplete(@NonNull Task task) {
+
+                           if (task.isSuccessful()){
+                               Toast.makeText(UserInfoActivity.this, "Your information saved! ", Toast.LENGTH_SHORT).show();
+                               startActivity(new Intent(UserInfoActivity.this, MainActivity.class));
+
+                           }else {
+
+                               Toast.makeText(UserInfoActivity.this, "Server is busy ", Toast.LENGTH_SHORT).show();
+                           }
+
+                       }
+                   });
 
 
-
-                    databaseReference.child("name").setValue(name);
-                    databaseReference.child("surname").setValue(surname);
-                    databaseReference.child("gender").setValue(gender);
-                    databaseReference.child("birthday").setValue(birthday).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                startActivity(new Intent(UserInfoActivity.this, MainActivity.class));
-                            } else {
-                                Toast.makeText(UserInfoActivity.this, "Server is busy ", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-                }else {
-                    Toast.makeText(UserInfoActivity.this,"Please enter all user information",Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
 
 
     }

@@ -1,5 +1,6 @@
 package com.example.project.myapplication;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -32,6 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private DatabaseReference databaseReference;
     private String email,password;
+    private ProgressDialog progressDialog;
 
 
     @Override
@@ -39,8 +41,14 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        btnSignIn = (Button) findViewById(R.id.btn_signIn);
+        edtPassword = (MaterialEditText) findViewById(R.id.edtPassword);
+        edtEmail = (MaterialEditText) findViewById(R.id.edtEmail);
+        linkSignUp = (TextView) findViewById(R.id.link_signup);
+        linkForgotPassword = (TextView) findViewById(R.id.link_forgotpassword);
 
-        setupUIViews();
+        progressDialog = new ProgressDialog(this);
+
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
@@ -84,18 +92,13 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void setupUIViews() {
-
-        btnSignIn = (Button) findViewById(R.id.btn_signIn);
-        edtPassword = (MaterialEditText) findViewById(R.id.edtPassword);
-        edtEmail = (MaterialEditText) findViewById(R.id.edtEmail);
-        linkSignUp = (TextView) findViewById(R.id.link_signup);
-        linkForgotPassword = (TextView) findViewById(R.id.link_forgotpassword);
-
-    }
 
 
     private void validate(String user_email, String user_password) {
+
+        progressDialog.setTitle("Logging in!");
+        progressDialog.setMessage("Please wait, while login your account.. ");
+        progressDialog.show();
 
 
 
@@ -110,19 +113,21 @@ public class LoginActivity extends AppCompatActivity {
 
                         final String user_id = firebaseAuth.getCurrentUser().getUid();
                         databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(user_id);
-                        final DatabaseReference nameReference = databaseReference.child("name");
+
 
                         databaseReference.child("password").setValue(password);
 
-                        nameReference.addValueEventListener(new ValueEventListener() {
+                        databaseReference.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                if (dataSnapshot.exists()) {
+                                if (dataSnapshot.child("name").exists()) {
                                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                 } else {
                                     startActivity(new Intent(LoginActivity.this, UserInfoActivity.class));
                                 }
+
+
 
                             }
 
@@ -131,14 +136,19 @@ public class LoginActivity extends AppCompatActivity {
 
                             }
                         });
+                        progressDialog.dismiss();
 
 
                     }
+
 
                 } else {
 
                     Toast.makeText(LoginActivity.this, "Login Failed!", Toast.LENGTH_SHORT).show();
                 }
+                progressDialog.dismiss();
+
+
             }
 
 
@@ -177,9 +187,5 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void firebaseUsers(){
 
-
-
-    }
 }

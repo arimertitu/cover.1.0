@@ -2,6 +2,7 @@ package com.example.project.myapplication;
 
 
 
+import android.app.ActivityManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Chronometer;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +35,7 @@ public class ShuffleFragment extends Fragment implements OnCountryPickerListener
     private CountryPicker countryPicker;
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
+    private Chronometer chronometer;
 
 
 
@@ -81,7 +84,8 @@ public class ShuffleFragment extends Fragment implements OnCountryPickerListener
         btnShuffle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                chronometer.start();
+                btnShuffle.setText("MATCHING..");
 
             }
         });
@@ -98,10 +102,10 @@ public class ShuffleFragment extends Fragment implements OnCountryPickerListener
                     public void onDataChange( DataSnapshot dataSnapshot) {
 
                         premium = dataSnapshot.child("premium").getValue().toString();
-                        if (premium.equals("0")) {
-                            Toast.makeText(getActivity(),"Premium selected",Toast.LENGTH_LONG).show();
-                        }else {
+                        if (premium.equals("1")) {
                             countryPicker.showDialog(getFragmentManager());
+                        }else {
+                            Toast.makeText(getActivity(),"Premium selected",Toast.LENGTH_LONG).show();
                         }
 
                     }
@@ -127,9 +131,11 @@ public class ShuffleFragment extends Fragment implements OnCountryPickerListener
         btnShuffle = (AppCompatButton) getView().findViewById(R.id.btnShuffle);
         btnSelectCountry = (AppCompatButton) getView().findViewById(R.id.btnSelectLocation);
         countryPicker = new CountryPicker.Builder().with(getActivity()).listener(this).build();
+        chronometer = (Chronometer)getView().findViewById(R.id.chronometerExample);
 
 
     }
+
 
 
 
