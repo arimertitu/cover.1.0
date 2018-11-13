@@ -3,6 +3,7 @@ package com.example.project.myapplication;
 
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -22,7 +23,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,13 +45,18 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.util.ArrayList;
+
 
 public class ProfileFragment extends Fragment {
 
+
+    private GridView gridView;
     private static final String TAG="ProfileFragment";
     private FloatingActionButton btnChangePhoto;
     private Button btnLogout,btnEditProfile;
@@ -62,6 +70,9 @@ public class ProfileFragment extends Fragment {
     private String user_id,name,surname,username,images,bio;
     private static int Gallery_Pick = 1;
     private Uri imageUri,resultUri;
+    private Context mContext;
+
+
 
 
     public ProfileFragment() {
@@ -98,11 +109,18 @@ public class ProfileFragment extends Fragment {
         txtDisplayUsername = (TextView) view.findViewById(R.id.txtUsername);
         txtBio = (TextView) view.findViewById(R.id.txtBio);
 
+        mContext = getActivity();
+
 
         firebaseAuth = FirebaseAuth.getInstance();
         user_id = firebaseAuth.getCurrentUser().getUid();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(user_id);
         storageReference = FirebaseStorage.getInstance().getReference().child("profile_photo");
+
+
+
+        setProfileImage();
+
 
         btnChangePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,15 +128,15 @@ public class ProfileFragment extends Fragment {
 
                 startActivity(new Intent(getActivity(),ProfileSettingActivity.class));
 
-                if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-
-                    requestPermissions(new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, 2000);
-                } else {
-                    Intent i = new Intent();
-                    i.setAction(Intent.ACTION_GET_CONTENT);
-                    i.setType("image/*");
-                    startActivityForResult(i, Gallery_Pick);
-                }
+//                if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+//
+//                    requestPermissions(new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, 2000);
+//                } else {
+//                    Intent i = new Intent();
+//                    i.setAction(Intent.ACTION_GET_CONTENT);
+//                    i.setType("image/*");
+//                    startActivityForResult(i, Gallery_Pick);
+//                }
 
 
             }
@@ -140,6 +158,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+//        initImageLoader();
 
         return view;
 
@@ -300,9 +319,11 @@ public class ProfileFragment extends Fragment {
 
     }
 
+
     private void setProfileImage(){
-        Log.d(TAG,"setProfileImage: setting profile image.");
-        String imgURL = "https://png2.kisspng.com/sh/eb808339bf6934991e40cead8695b39a/L0KzQYi4UsE3N2E6UJGAYUO4RLbpUvIzP2M5TZCCNUG7QYiBVsE2OWQ5TKQEOUS6Q4GCTwBvbz==/5a354eb2b27245.7518178615134429947309.png"
-        Univer
+        Log.d(TAG, "setProfileImage: setting profile photo.");
+        String imgURL = "www.androidcentral.com/sites/androidcentral.com/files/styles/xlarge/public/article_images/2016/08/ac-lloyd.jpg?itok=bb72IeLf";
+        UniversalImageLoader.setImage(imgURL, imgProfile, null, "https://");
     }
+
 }

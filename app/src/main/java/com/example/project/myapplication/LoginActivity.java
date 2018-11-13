@@ -24,6 +24,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
+import java.util.HashMap;
+
 public class LoginActivity extends AppCompatActivity {
 
     private Button btnSignIn;
@@ -56,7 +58,10 @@ public class LoginActivity extends AppCompatActivity {
 
         if (firebaseUser != null) {
             finish();
-
+            final String user_id = firebaseAuth.getCurrentUser().getUid();
+            databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(user_id);
+            databaseReference.child("status").onDisconnect().setValue("offline");
+            databaseReference.child("status").setValue("online");
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
         }
 
@@ -115,12 +120,14 @@ public class LoginActivity extends AppCompatActivity {
                         databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(user_id);
 
 
-                        databaseReference.child("password").setValue(password);
+
 
                         databaseReference.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+                                databaseReference.child("status").onDisconnect().setValue("offline");
+                                databaseReference.child("password").setValue(password);
+                                databaseReference.child("status").setValue("online");
                                 if (dataSnapshot.child("name").exists()) {
                                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                 } else {
@@ -186,6 +193,5 @@ public class LoginActivity extends AppCompatActivity {
             return false;
         }
     }
-
 
 }

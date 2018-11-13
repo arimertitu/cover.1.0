@@ -2,6 +2,7 @@ package com.example.project.myapplication;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Criteria;
@@ -24,13 +25,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -38,20 +42,30 @@ public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigationView;
     private LocationManager locationManager;
-    private Context context;
+    private Context mContext= MainActivity.this;
     private String locationCountry;
     private String provider;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser currentUser;
+    private DatabaseReference databaseReference;
+    private String user_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        firebaseAuth = FirebaseAuth.getInstance();
+        user_id = firebaseAuth.getCurrentUser().getUid();
+
+        currentUser = firebaseAuth.getCurrentUser();
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(user_id);
+
         bottomNavigationBar();
         Boolean a = findLocation();
         sendDataShuffle();
 
-
+        initImageLoader();
 
     }
 
@@ -146,11 +160,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
-
-
-//
-//
-
     }
 
 
@@ -203,5 +212,34 @@ public class MainActivity extends AppCompatActivity {
 
     public String country(){
         return locationCountry;
+    }
+
+        private void initImageLoader(){
+        UniversalImageLoader universalImageLoader = new UniversalImageLoader(mContext);
+        ImageLoader.getInstance().init(universalImageLoader.getConfig());
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        currentUser = firebaseAuth.getCurrentUser();
+
+        if (currentUser == null ){
+            startActivity(new Intent(MainActivity.this,LoginActivity.class));
+            finish();
+        }else if (currentUser != null){
+
+            databaseReference.child("status").setValue("online");
+
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (currentUser != null){
+
+            databaseReference.child("status").setValue("offline");
+        }
     }
 }

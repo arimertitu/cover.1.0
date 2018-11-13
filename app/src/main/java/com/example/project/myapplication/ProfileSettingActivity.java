@@ -32,6 +32,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.squareup.picasso.Picasso;
 
@@ -40,6 +41,7 @@ import java.util.HashMap;
 
 public class ProfileSettingActivity extends AppCompatActivity {
 
+    private static final String TAG="ProfileSettingActivity";
     private MaterialEditText edtName,edtSurname,edtUsername;
     private TextView txtBirthday;
     private ImageView imgProfile;
@@ -99,6 +101,9 @@ public class ProfileSettingActivity extends AppCompatActivity {
         user_id = mAuth.getCurrentUser().getUid();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(user_id);
 
+
+        initImageLoader();
+        setProfileImage();
 
         btnChangePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -213,5 +218,16 @@ public class ProfileSettingActivity extends AppCompatActivity {
 
 
 
+    }
+
+    private void setProfileImage(){
+        Log.d(TAG,"setProfileImage: setting profile image.");
+        String imgURL = "png2.kisspng.com/sh/eb808339bf6934991e40cead8695b39a/L0KzQYi4UsE3N2E6UJGAYUO4RLbpUvIzP2M5TZCCNUG7QYiBVsE2OWQ5TKQEOUS6Q4GCTwBvbz==/5a354eb2b27245.7518178615134429947309.png";
+        UniversalImageLoader.setImage(imgURL,imgProfile,null,"https://");
+    }
+
+    private void initImageLoader(){
+        UniversalImageLoader universalImageLoader = new UniversalImageLoader(this);
+        ImageLoader.getInstance().init(universalImageLoader.getConfig());
     }
 }

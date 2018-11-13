@@ -82,6 +82,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 userMap.put("email", email);
                                 userMap.put("premium", premium);
                                 userMap.put("password", password);
+                                userMap.put("status","offline");
 
                                 databaseReference.updateChildren(userMap).addOnCompleteListener(new OnCompleteListener() {
                                     @Override
