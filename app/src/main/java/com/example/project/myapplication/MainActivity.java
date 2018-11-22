@@ -219,20 +219,20 @@ public class MainActivity extends AppCompatActivity {
         ImageLoader.getInstance().init(universalImageLoader.getConfig());
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        currentUser = firebaseAuth.getCurrentUser();
-
-        if (currentUser == null ){
-            startActivity(new Intent(MainActivity.this,LoginActivity.class));
-            finish();
-        }else if (currentUser != null){
-
-            databaseReference.child("status").setValue("online");
-
-        }
-    }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        currentUser = firebaseAuth.getCurrentUser();
+//
+//        if (currentUser == null ){
+//            startActivity(new Intent(MainActivity.this,LoginActivity.class));
+//            finish();
+//        }else if (currentUser != null){
+//
+//            databaseReference.child("status").setValue("online");
+//
+//        }
+//    }
 
     @Override
     protected void onStop() {

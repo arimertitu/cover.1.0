@@ -14,7 +14,8 @@
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
@@ -25,60 +26,18 @@
             app:collapsedTitleTextAppearance="@style/CollapsedAppBar"
             app:expandedTitleTextAppearance="@style/ToolbarAppBar"
             android:background="@color/colorPrimaryDark"
-            android:layout_height="300dp">
-
-            <ImageView
-            android:src="@mipmap/ic_launcher"
-            app:layout_collapseMode="parallax"
-            android:contentDescription="@null"
-            android:scaleType="centerCrop"
-            android:id="@+id/imgProfile"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-            <LinearLayout
-                android:layout_gravity="bottom|left|end"
-                android:layout_marginLeft="12dp"
-                android:layout_marginBottom="12dp"
-                android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-
-                <TextView
-                    android:background="@color/colorPrimaryDark"
-                    android:id="@+id/txtName"
-                    android:textStyle="bold"
-                    android:text=""
-                    android:textSize="18sp"
-                    android:textColor="@android:color/white"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-
-                <TextView
-                    android:layout_marginTop="8dp"
-                    android:background="@color/colorPrimaryDark"
-                    android:id="@+id/txtUsername"
-                    android:textStyle="italic"
-                    android:text=""
-                    android:textSize="12sp"
-                    android:textColor="@android:color/white"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+            android:layout_height="150dp"
+            >
 
 
 
 
-
-
-            </LinearLayout>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbarId"
                 app:title="About You"
                 app:subtitleTextColor="@color/colorPrimaryDark"
-                app:layout_collapseMode="parallax"
+                app:layout_collapseMode="pin"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 android:theme="@style/AppTheme.Patient"
                 android:layout_width="match_parent"
@@ -89,38 +48,71 @@
 
 
 
+
         </android.support.design.widget.CollapsingToolbarLayout>
+
+
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/btnChangePhoto"
-        android:src="@drawable/ic_add_a_photo_black_24dp"
-        android:backgroundTint="@android:color/white"
-        android:elevation="6dp"
-        app:pressedTranslationZ="12dp"
-        app:layout_anchor="@id/appbar"
-        app:layout_anchorGravity="bottom|right|end"
-        app:useCompatPadding="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+
+
 
     <android.support.v4.widget.NestedScrollView
+        android:background="@color/biocolor"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:clipToPadding="false"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <LinearLayout
+            android:background="@color/biocolor"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <LinearLayout
+                android:layout_marginTop="36dp"
+                android:layout_gravity="center_horizontal"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+
+                <TextView
+                    android:layout_marginTop="36dp"
+                    android:id="@+id/txtName"
+                    android:textStyle="bold"
+                    android:text="Name/Surname"
+                    android:textSize="18sp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+
+                <TextView
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp"
+                    android:id="@+id/txtUsername"
+                    android:textStyle="italic"
+                    android:text="nickname"
+                    android:textSize="12sp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+
+
+
+
+
+            </LinearLayout>
+
         <android.support.v7.widget.CardView
-            android:layout_marginTop="24dp"
+            android:id="@+id/cardview"
+            android:layout_marginTop="16dp"
             app:cardUseCompatPadding="true"
             app:cardElevation="8dp"
-            android:layout_marginBottom="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -135,7 +127,7 @@
                     android:padding="12dp"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="16sp"
-                    android:text="About you!Herkesin kendi tarzını yansıtabilmesi gerektiğine; dinlediğimizde, paylaştığımızda ve hikayelerimizle birbirimize bağlandığımızda dünyanın daha güzel bir yer olacağına inanıyoruz."
+                    android:text="Add something about you!"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
@@ -146,28 +138,68 @@
         </android.support.v7.widget.CardView>
 
 
+            <RelativeLayout
+                android:background="@color/biocolor"
+                android:id="@+id/relLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cardview"
+                >
 
-            <Button
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                android:id="@+id/btnEditProfile"
-                android:textColor="@android:color/white"
-                android:background="@drawable/button_style_dark"
-                android:text="EDIT PROFILE"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <GridView
+                    android:layout_marginRight="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@android:color/white"
+                    android:layout_marginTop="16dp"
+                    android:id="@+id/gridView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:horizontalSpacing="2dp"
+                    android:numColumns="2"
+                    android:stretchMode="columnWidth"
+                    android:verticalSpacing="1dp">
 
-            <Button
-                android:layout_marginBottom="8dp"
+
+                </GridView>
+
+
+            </RelativeLayout>
+
+
+            <LinearLayout
+                android:background="@color/biocolor"
                 android:layout_marginTop="8dp"
-                android:id="@+id/btnLogout"
-                android:textColor="@android:color/white"
-                android:background="@drawable/button_style_dark"
-                android:text="LOGOUT"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="16dp"
+                    android:id="@+id/btnEditProfile"
+                    android:textColor="@android:color/white"
+                    android:background="@drawable/button_style_dark"
+                    android:text="EDIT PROFILE"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <Button
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:id="@+id/btnLogout"
+                    android:textColor="@android:color/white"
+                    android:background="@drawable/button_style_dark"
+                    android:text="LOGOUT"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+
 
 
         </LinearLayout>
@@ -180,6 +212,20 @@
 
 
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/imgProfile"
+        android:elevation="6dp"
+        android:src="@drawable/round_button"
+        app:layout_anchor="@id/appbar"
+        app:layout_anchorGravity="bottom|center"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:scaleType="center"
+        app:borderWidth="0dp"
+
+
+        >
+    </android.support.design.widget.FloatingActionButton>
 
 
 

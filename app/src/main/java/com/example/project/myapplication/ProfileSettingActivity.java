@@ -1,11 +1,19 @@
 package com.example.project.myapplication;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.nfc.Tag;
+import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
@@ -19,6 +27,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -39,6 +49,7 @@ import com.squareup.picasso.Picasso;
 import java.util.Calendar;
 import java.util.HashMap;
 
+
 public class ProfileSettingActivity extends AppCompatActivity {
 
     private static final String TAG="ProfileSettingActivity";
@@ -54,27 +65,16 @@ public class ProfileSettingActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseStorage fStorage;
     private String user_id,gender;
-    private StorageReference storageRef;
+    private StorageReference storageReference;
     private DatabaseReference databaseReference;
     private int secimgender;
+    private Uri mImageUri;
+
 
     private static final int PICK_IMAGE_REQUEST = 123;
     private Uri filePath;
+    private static int Gallery_Pick = 1;
 
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            filePath = data.getData();
-            try {
-                Picasso.get().load(filePath).fit().centerCrop().into(imgProfile);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
 
     @Override
@@ -100,17 +100,34 @@ public class ProfileSettingActivity extends AppCompatActivity {
         fStorage = FirebaseStorage.getInstance();
         user_id = mAuth.getCurrentUser().getUid();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(user_id);
+        storageReference = FirebaseStorage.getInstance().getReference().child("ProfilePhoto");
 
 
-        initImageLoader();
-        setProfileImage();
+
+
+
 
         btnChangePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                imageSelect();
             }
         });
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String mImageUri = preferences.getString("image", null);
+
+
+        if (mImageUri != null) {
+            try {
+                Picasso.get().load(mImageUri).transform(new CircleTransform()).into(imgProfile);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            Picasso.get().load(R.drawable.ic_person_black_24dp).transform(new CircleTransform()).into(imgProfile);
+        }
+
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -200,6 +217,7 @@ public class ProfileSettingActivity extends AppCompatActivity {
 
                         if (task.isSuccessful()){
                             Toast.makeText(ProfileSettingActivity.this, "Your information saved! ", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(ProfileSettingActivity.this,ProfileFragment.class));
 
                         }else {
 
@@ -220,14 +238,72 @@ public class ProfileSettingActivity extends AppCompatActivity {
 
     }
 
-    private void setProfileImage(){
-        Log.d(TAG,"setProfileImage: setting profile image.");
-        String imgURL = "png2.kisspng.com/sh/eb808339bf6934991e40cead8695b39a/L0KzQYi4UsE3N2E6UJGAYUO4RLbpUvIzP2M5TZCCNUG7QYiBVsE2OWQ5TKQEOUS6Q4GCTwBvbz==/5a354eb2b27245.7518178615134429947309.png";
-        UniversalImageLoader.setImage(imgURL,imgProfile,null,"https://");
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            if (data != null) {
+
+                // This is the key line item, URI specifies the name of the data
+                mImageUri = data.getData();
+
+                final StorageReference filePath = storageReference.child(user_id + ".jpg");
+                filePath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        filePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                databaseReference.child("image").setValue(uri.toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        Toast.makeText(ProfileSettingActivity.this,"İşlem Başarılı",Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+
+
+            }
+            // Saves image URI as string to Default Shared Preferences
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ProfileSettingActivity.this);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("image", String.valueOf(mImageUri));
+            editor.commit();
+            try {
+                Picasso.get().load(mImageUri).transform(new CircleTransform()).into(imgProfile);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+
     }
 
-    private void initImageLoader(){
-        UniversalImageLoader universalImageLoader = new UniversalImageLoader(this);
-        ImageLoader.getInstance().init(universalImageLoader.getConfig());
+    public void imageSelect() {
+        permissionsCheck();
+        Intent intent;
+        if (Build.VERSION.SDK_INT < 19) {
+            intent = new Intent(Intent.ACTION_GET_CONTENT);
+        } else {
+            intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+        }
+        intent.setType("image/*");
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
+
+    public void permissionsCheck() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+            return;
+        }
+    }
+
 }

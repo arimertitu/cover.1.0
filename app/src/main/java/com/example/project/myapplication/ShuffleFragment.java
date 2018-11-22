@@ -3,11 +3,14 @@ package com.example.project.myapplication;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatButton;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +21,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,15 +32,35 @@ import com.mukesh.countrypicker.CountryPicker;
 import com.mukesh.countrypicker.OnCountryPickerListener;
 
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashMap;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Objects;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 
 public class ShuffleFragment extends Fragment implements OnCountryPickerListener {
 
     private AppCompatButton btnShuffle;
-    private TextView txtLocation;
+    private TextView txtLocation,txtOnlineUser;
     private String countryLocation, user_id, premium;
     private AppCompatButton btnSelectCountry;
     private CountryPicker countryPicker;
@@ -44,7 +68,7 @@ public class ShuffleFragment extends Fragment implements OnCountryPickerListener
     private DatabaseReference databaseReference, shuffleManReference, deleteReference, shuffleWomenReference;
     private Chronometer chronometer;
     private String isMatching = "0";
-    private String  gender;
+    private String  gender,cinsiyet;
     private ProgressDialog shuffleProgressDialog;
     private long pauseOffset;
     private int count;
@@ -89,15 +113,47 @@ public class ShuffleFragment extends Fragment implements OnCountryPickerListener
 
         setupUIViews();
 
+        OkHttpClient client=new OkHttpClient();
+        String url = "https://afternoon-fjord-65850.herokuapp.com/online_users";
+
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+                if (response.isSuccessful()){
+                    final String myResponse = response.body().string();
+                    Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            txtOnlineUser.setText(myResponse);
+
+                        }
+                    });
+                }
+            }
+        });
+
+
         txtLocation.setText(countryLocation);
 
 
         firebaseAuth = FirebaseAuth.getInstance();
         user_id = firebaseAuth.getCurrentUser().getUid();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(user_id);
-        shuffleManReference = FirebaseDatabase.getInstance().getReference().child("Shuffle").child("Man");
+        shuffleManReference = FirebaseDatabase.getInstance().getReference().child("Shuffle").child("Men");
         shuffleWomenReference = FirebaseDatabase.getInstance().getReference().child("Shuffle").child("Women");
         deleteReference = FirebaseDatabase.getInstance().getReference().child("Shuffle");
+
+
 
         btnShuffle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,7 +171,7 @@ public class ShuffleFragment extends Fragment implements OnCountryPickerListener
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (gender.equals("M")) {
-                            deleteReference.child("Man").child(user_id).removeValue();
+                            deleteReference.child("Men").child(user_id).removeValue();
                         } else {
                             deleteReference.child("Women").child(user_id).removeValue();
                         }
@@ -134,7 +190,6 @@ public class ShuffleFragment extends Fragment implements OnCountryPickerListener
 
                         gender = dataSnapshot.child("gender").getValue().toString();
 
-
                         HashMap shuffleMap = new HashMap();
                         shuffleMap.put("date",   currentTime.format(timestamp));
                         shuffleMap.put("gender", gender);
@@ -152,7 +207,7 @@ public class ShuffleFragment extends Fragment implements OnCountryPickerListener
                                                  count = (int) dataSnapshot.getChildrenCount();
 
                                                 if (count == 0){
-                                                   deleteReference.child("Man").child(user_id).removeValue();
+                                                    deleteReference.child("Men").child(user_id).removeValue();
                                                     shuffleProgressDialog.dismiss();
                                                     chronometer.setBase(SystemClock.elapsedRealtime());
                                                     pauseOffset = 0;
@@ -185,7 +240,7 @@ public class ShuffleFragment extends Fragment implements OnCountryPickerListener
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                                 int count = (int) dataSnapshot.getChildrenCount();
                                                 if (count == 0){
-//                                                    deleteReference.child("Women").child(user_id).removeValue();
+                                                   deleteReference.child("Women").child(user_id).removeValue();
                                                     shuffleProgressDialog.dismiss();
                                                     chronometer.setBase(SystemClock.elapsedRealtime());
                                                     pauseOffset = 0;
@@ -253,7 +308,7 @@ public class ShuffleFragment extends Fragment implements OnCountryPickerListener
 
     private void setupUIViews() {
 
-
+        txtOnlineUser = (TextView)getView().findViewById(R.id.txtOnlineUser);
         txtLocation = (TextView) getView().findViewById(R.id.txtLocation);
         btnShuffle = (AppCompatButton) getView().findViewById(R.id.btnShuffle);
         btnSelectCountry = (AppCompatButton) getView().findViewById(R.id.btnSelectLocation);
@@ -266,16 +321,7 @@ public class ShuffleFragment extends Fragment implements OnCountryPickerListener
 
     @Override
     public void onSelectCountry(Country country) {
-
-
         txtLocation.setText(country.getName());
-
-
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
     }
 
 
@@ -284,41 +330,61 @@ public class ShuffleFragment extends Fragment implements OnCountryPickerListener
         super.onResume();
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (gender.equals("M")) {
-            deleteReference.child("Man").child(user_id).removeValue();
-        } else {
-            deleteReference.child("Women").child(user_id).removeValue();
-        }
-    }
+//    @Override
+//    public void onStop() {
+//        super.onStop();
+//        shuffleProgressDialog.dismiss();
+//        chronometer.setBase(SystemClock.elapsedRealtime());
+//        pauseOffset = 0;
+//        chronometer.stop();
+//
+//
+//        if (cinsiyet.equals("M")) {
+//            deleteReference.child("Man").addValueEventListener(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                    if (dataSnapshot.child(user_id).exists()){
+//                        deleteReference.child("Man").child(user_id).removeValue();
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                }
+//            });
+//        }else if (cinsiyet.equals("F")){
+//            deleteReference.child("Women").addValueEventListener(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                    if (dataSnapshot.child(user_id).exists()){
+//                        deleteReference.child("Women").child(user_id).removeValue();
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                }
+//            });
+//        }else {
+//
+//        }
+//
+//    }
 
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (gender.equals("M")) {
-            deleteReference.child("Man").child(user_id).removeValue();
-        } else {
-            deleteReference.child("Women").child(user_id).removeValue();
-        }
-
-
-    }
-
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (gender.equals("M")) {
-            deleteReference.child("Man").child(user_id).removeValue();
-        } else {
-            deleteReference.child("Women").child(user_id).removeValue();
-        }
-
-    }
-
+//    @Override
+//    public void onDestroyView() {
+//        super.onDestroyView();
+//        if (cinsiyet.equals("M")) {
+//            deleteReference.child("Man").child(user_id).removeValue();
+//        }
+//        if (cinsiyet.equals("F")){
+//            deleteReference.child("Women").child(user_id).removeValue();
+//        }
+//
+//    }
 }
 
 
